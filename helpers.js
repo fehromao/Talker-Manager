@@ -6,8 +6,8 @@ const readTalkersFile = async (path) =>
 
 const generateToken = () => crypto.randomBytes(8).toString('hex');
 
-const validationLogin = async (email,password) => {
-  
+const validationLogin = async (email, password) => {
+  console.log(email, password);
 };
 
 module.exports = { readTalkersFile, generateToken, validationLogin };
