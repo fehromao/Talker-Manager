@@ -6,6 +6,19 @@ const readTalkersFile = async (path) =>
 
 const generateToken = () => crypto.randomBytes(8).toString('hex');
 
-const writeTalker = () => {};
+const writeTalkersFile = async () => {
+  try {
+    await fs.writeFile('talker.json', {
+      name: 'Danielle Santos',
+      age: 56,
+      talk: {
+        watchedAt: '22/10/2019',
+        rate: 5,
+      },
+    });
+  } catch (err) {
+    console.error(`Erro ao escrever o arquivo: ${err.message}`);
+  }
+};
 
-module.exports = { readTalkersFile, generateToken, writeTalker };
+module.exports = { readTalkersFile, generateToken, writeTalkersFile };
