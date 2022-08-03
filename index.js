@@ -32,7 +32,9 @@ app.get('/talker/:id', async (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-  const { email, password } = req.body;
+  // const { email, password } = req.body;
+  const token = helpers.generateToken();
+  res.status(200).json({ token });
 });
 
 app.listen(PORT, () => {
