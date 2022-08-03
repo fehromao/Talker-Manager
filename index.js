@@ -1,7 +1,14 @@
 const express = require('express');
+const fs = require('fs/promises');
 const bodyParser = require('body-parser');
 const helpers = require('./helpers');
 const validationLogin = require('./midlleware/validationLogin');
+const {
+  validationName,
+  validationAge,
+  validationTalk,
+  validationRate,
+  validationToken } = require('./midlleware/validationNewTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -37,8 +44,14 @@ app.post('/login', validationLogin, (req, res) => {
   res.status(200).json({ token });
 });
 
-app.post('/talker', () => {
-  
+app.post('/talker', validationToken, validationName,
+  validationAge, validationTalk, validationRate, async (req, res) => {
+  const newTalker = req.body;
+  const talkers = await helpers.readTalkersFile('talker.json');
+  newTalker.id = talkers[talkers.length - 1].id + 1;
+  talkers.push(newTalker);
+  await fs.writeFile('talker.json', JSON.stringify(talkers));
+  return res.status(201).json(newTalker);
 });
 
 app.listen(PORT, () => {
