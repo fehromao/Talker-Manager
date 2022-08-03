@@ -37,6 +37,10 @@ app.post('/login', validationLogin, (req, res) => {
   res.status(200).json({ token });
 });
 
+app.post('/talker', () => {
+  
+});
+
 app.listen(PORT, () => {
   console.log('Online');
 });
