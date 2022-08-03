@@ -27,6 +27,6 @@ const validationLogin = (req, res, next) => {
   next();
 };
 
-const createtalker = () => {};
+const writeTalker = () => {};
 
-module.exports = { readTalkersFile, generateToken, validationLogin };
+module.exports = { readTalkersFile, generateToken, validationLogin, writeTalker };
