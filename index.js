@@ -31,8 +31,7 @@ app.get('/talker/:id', async (req, res) => {
   return res.status(200).json(findTalker);
 });
 
-app.post('/login', (req, res) => {
-  // const { email, password } = req.body;
+app.post('/login', helpers.validationLogin, (req, res) => {
   const token = helpers.generateToken();
   res.status(200).json({ token });
 });
