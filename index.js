@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const helpers = require('./helpers');
+const validationLogin = require('./midlleware/validationLogin');
 
 const app = express();
 app.use(bodyParser.json());
@@ -31,7 +32,7 @@ app.get('/talker/:id', async (req, res) => {
   return res.status(200).json(findTalker);
 });
 
-app.post('/login', helpers.validationLogin, (req, res) => {
+app.post('/login', validationLogin, (req, res) => {
   const token = helpers.generateToken();
   res.status(200).json({ token });
 });
