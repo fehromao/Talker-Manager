@@ -54,6 +54,11 @@ app.post('/talker', validationToken, validationName,
   return res.status(201).json(newTalker);
 });
 
+app.put('/talker/:id', validationToken, validationName,
+  validationAge, validationTalk, validationRate, (req, res) => {
+    
+});
+
 app.listen(PORT, () => {
   console.log('Online');
 });
