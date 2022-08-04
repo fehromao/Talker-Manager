@@ -57,14 +57,26 @@ app.post('/talker', validationToken, validationName,
 app.put('/talker/:id', validationToken, validationName,
   validationAge, validationTalk, validationRate, async (req, res) => {
     const { id } = req.params;
-    const { name, age, talk: { watchedAt, rate } } = req.body;
+    const talker = req.body;
     const talkers = await helpers.readTalkersFile('talker.json');
-    const talkerId = talkers.find((t) => t.id === Number(id));
-    console.log(talkerId);
-    if (talkerId) {
-      talkers[talkerId] = { ...talkers[talkerId], name, age, watchedAt, rate };
-      res.status(200).json(talkerId);
-    }
+    const talkerInfo = talkers.map((t) => {
+      if (t.id === Number(id)) {
+        return { ...t, ...talker, id: Number(id) };
+      } 
+      return t;
+    });
+    await helpers.writeTalkersFile(talkerInfo);
+    return res.status(200).json({ ...talker, id: Number(id) });
+});
+
+app.delete('/talker/:id', validationToken, async (req, res) => {
+  const { id } = req.params;
+  const talkers = await helpers.readTalkersFile('talker.json');
+  const talkerId = talkers.find((t) => t.id === Number(id));
+  if (talkerId) {
+    talkers.splice(1, talkerId);
+  return res.status(204).end();  
+  }
 });
 
 app.listen(PORT, () => {
