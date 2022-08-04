@@ -55,8 +55,16 @@ app.post('/talker', validationToken, validationName,
 });
 
 app.put('/talker/:id', validationToken, validationName,
-  validationAge, validationTalk, validationRate, (req, res) => {
-    
+  validationAge, validationTalk, validationRate, async (req, res) => {
+    const { id } = req.params;
+    const { name, age, talk: { watchedAt, rate } } = req.body;
+    const talkers = await helpers.readTalkersFile('talker.json');
+    const talkerId = talkers.find((t) => t.id === Number(id));
+    console.log(talkerId);
+    if (talkerId) {
+      talkers[talkerId] = { ...talkers[talkerId], name, age, watchedAt, rate };
+      res.status(200).json(talkerId);
+    }
 });
 
 app.listen(PORT, () => {
