@@ -15,6 +15,7 @@ app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
+const FILE = 'talker.json';
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
@@ -22,7 +23,7 @@ app.get('/', (_request, response) => {
 });
 
 app.get('/talker', async (req, res) => {
-  const talkers = await helpers.readTalkersFile('talker.json');
+  const talkers = await helpers.readTalkersFile(FILE);
 
   if (talkers.length < 1) return res.status(200).json([]);
 
@@ -31,7 +32,7 @@ app.get('/talker', async (req, res) => {
 
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
-  const talkers = await helpers.readTalkersFile('talker.json');
+  const talkers = await helpers.readTalkersFile(FILE);
   const findTalker = talkers.find((talker) => talker.id === Number(id));
   if (!findTalker) {
     return res.status(404).json({ message: 'Pessoa palestrante não encontrada' }); 
@@ -47,10 +48,10 @@ app.post('/login', validationLogin, (req, res) => {
 app.post('/talker', validationToken, validationName,
   validationAge, validationTalk, validationRate, async (req, res) => {
   const newTalker = req.body;
-  const talkers = await helpers.readTalkersFile('talker.json');
+  const talkers = await helpers.readTalkersFile(FILE);
   newTalker.id = talkers[talkers.length - 1].id + 1;
   talkers.push(newTalker);
-  await fs.writeFile('talker.json', JSON.stringify(talkers));
+  await fs.writeFile(FILE, JSON.stringify(talkers));
   return res.status(201).json(newTalker);
 });
 
@@ -58,7 +59,7 @@ app.put('/talker/:id', validationToken, validationName,
   validationAge, validationTalk, validationRate, async (req, res) => {
     const { id } = req.params;
     const talker = req.body;
-    const talkers = await helpers.readTalkersFile('talker.json');
+    const talkers = await helpers.readTalkersFile(FILE);
     const talkerInfo = talkers.map((t) => {
       if (t.id === Number(id)) {
         return { ...t, ...talker, id: Number(id) };
@@ -71,7 +72,7 @@ app.put('/talker/:id', validationToken, validationName,
 
 app.delete('/talker/:id', validationToken, async (req, res) => {
   const { id } = req.params;
-  const talkers = await helpers.readTalkersFile('talker.json');
+  const talkers = await helpers.readTalkersFile(FILE);
   const talkerId = talkers.find((t) => t.id === Number(id));
   if (talkerId) {
     talkers.splice(1, talkerId);
