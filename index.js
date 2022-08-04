@@ -72,13 +72,17 @@ app.put('/talker/:id', validationToken, validationName,
 
 app.delete('/talker/:id', validationToken, async (req, res) => {
   const { id } = req.params;
+  const talker = req.body;
   const talkers = await helpers.readTalkersFile(FILE);
-  const talkerId = talkers.find((t) => t.id === Number(id));
-  if (talkerId) {
-    talkers.splice(1, talkerId);
-  return res.status(204).end();  
-  }
-});
+  const talkerInfo = talkers.filter((t) => {
+    if (t.id === Number(id)) {
+      return { ...t.id };
+    }
+    return t;
+  });
+  await helpers.writeTalkersFile(talkerInfo);
+  return res.status(204).end();
+  });
 
 app.listen(PORT, () => {
   console.log('Online');
