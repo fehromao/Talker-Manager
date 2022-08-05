@@ -1,5 +1,4 @@
 const express = require('express');
-const fs = require('fs/promises');
 const bodyParser = require('body-parser');
 const helpers = require('./helpers');
 const validationLogin = require('./midlleware/validationLogin');
@@ -60,7 +59,7 @@ app.post('/talker', validationToken, validationName,
   const talkers = await helpers.readTalkersFile(FILE);
   newTalker.id = talkers[talkers.length - 1].id + 1;
   talkers.push(newTalker);
-  await fs.writeFile(FILE, JSON.stringify(talkers));
+  await helpers.writeTalkersFile(talkers);
   return res.status(201).json(newTalker);
 });
 
