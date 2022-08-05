@@ -79,6 +79,10 @@ app.delete('/talker/:id', validationToken, async (req, res) => {
     return res.status(204).end();
   });
 
+app.get('/talker/search?q=searchTerm', validationToken, (req, res) => {
+    const { name } = req.query;
+});
+
 app.listen(PORT, () => {
   console.log('Online');
 });
