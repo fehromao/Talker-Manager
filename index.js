@@ -72,16 +72,11 @@ app.put('/talker/:id', validationToken, validationName,
 
 app.delete('/talker/:id', validationToken, async (req, res) => {
   const { id } = req.params;
-  const talker = req.body;
+  // const talker = req.body;
   const talkers = await helpers.readTalkersFile(FILE);
-  const talkerInfo = talkers.filter((t) => {
-    if (t.id === Number(id)) {
-      return { ...t.id };
-    }
-    return t;
-  });
+  const talkerInfo = talkers.filter((t) => t.id !== Number(id));
   await helpers.writeTalkersFile(talkerInfo);
-  return res.status(204).end();
+    return res.status(204).end();
   });
 
 app.listen(PORT, () => {
